@@ -8,12 +8,7 @@
 </head>
 <body>
 <div> ERRO DE LOGIN!!</div>
-   <fieldset class="form-group">
-     <label>Imagem</label> <input type="file"
-      value="<c:out value='${todo.imagem}' />" class="form-control"
-      name="imagem" required="required" >
-    </fieldset>
-    
-enctype="multipart/form-data
+  
+   
 </body>
 </html>

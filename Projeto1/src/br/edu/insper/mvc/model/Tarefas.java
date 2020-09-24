@@ -1,6 +1,6 @@
 package br.edu.insper.mvc.model;
 
-import java.io.InputStream;
+
 import java.util.Calendar;
 
 public class Tarefas {
@@ -10,7 +10,7 @@ public class Tarefas {
 	private Calendar data;
 	private String categoria;
 	private Integer user;
-	private InputStream imagem;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -36,12 +36,7 @@ public class Tarefas {
 		this.categoria = categoria;
 	}
 	
-	public InputStream getImagem() {
-		return imagem;
-	}
-	public void setImagem(InputStream inputStream) {
-		this.imagem = inputStream;
-	}
+	
 	public Integer getUser() {
 		return user;
 	}

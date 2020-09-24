@@ -1,26 +1,22 @@
 package br.edu.insper.mvc.controller;
 
-import java.io.FileInputStream;
+
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-
-import br.edu.insper.mvc.model.DAOTarefas;
+import br.edu.insper.mvc.model.DAO;
 import br.edu.insper.mvc.model.Tarefas;
-import br.edu.insper.mvc.model.Usuarios;
+
 
 /**
  * Servlet implementation class Tarefas
@@ -49,7 +45,7 @@ public class Tarefa extends HttpServlet {
 	                    showNewForm(request, response);
 	                    break;
 	                case "/insert":
-	                    insertTodo(request, response);
+	                	inserirTarefa(request, response);
 	                    break;
 	                case "/del":
 	                	showDeleteForm(request, response);
@@ -57,13 +53,13 @@ public class Tarefa extends HttpServlet {
 	                    break;
 	                case "/delete":
 	                	//showDeleteForm(request, response);
-	                   deleteTodo(request, response);
+	                   deletaTarefa(request, response);
 	                    break;
 	                case "/edit":
 	                    showEditForm(request, response);
 	                    break;
 	                case "/update":
-	                    updateTodo(request, response);
+	                	atualizaTarefa(request, response);
 	                    break;
 	                case "/list":
 	                    listTodo(request, response);
@@ -97,12 +93,20 @@ public class Tarefa extends HttpServlet {
 		    
 		        
 		        
-				DAOTarefas dao =new DAOTarefas();
-				List<br.edu.insper.mvc.model.Tarefas> tarefas = dao.getLista();
+				DAO dao =new DAO();
+				
+				Integer userId = Integer.valueOf(request.getParameter("userId"));
+				List<br.edu.insper.mvc.model.Tarefas> tarefas = dao.getLista(userId);
 				request.setAttribute("listTodo", tarefas);
+				request.setAttribute("userId", userId);
+				dao.close();
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/Tarefas.jsp");
 				dispatcher.forward(request, response);
-				dao.close();
+				
+				
+				
+		        
+	       
 		        
 		    }
 	private void filtList(HttpServletRequest request, HttpServletResponse response)
@@ -110,27 +114,40 @@ public class Tarefa extends HttpServlet {
 		    
 		        
 		        
-				DAOTarefas dao =new DAOTarefas();
-				List<br.edu.insper.mvc.model.Tarefas> tarefas = dao.getListaFiltrada();
+				DAO dao =new DAO();
+
+				Integer userId = Integer.valueOf(request.getParameter("userId"));
+				request.setAttribute("userId", userId);
+				List<br.edu.insper.mvc.model.Tarefas> tarefas = dao.getListaFiltrada(userId);
 				request.setAttribute("listTodo", tarefas);
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/Tarefas.jsp");
 				dispatcher.forward(request, response);
 				dao.close();
-		        
+				
+				
 		    }
 
 		    private void showNewForm(HttpServletRequest request, HttpServletResponse response)
 		    throws ServletException, IOException {
+		    	
+		    
+		    	String userId = request.getParameter("userId");
+		    	request.setAttribute("userId", userId);
+				
+		    	
 		        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/NovaTarefa.jsp");
 		        dispatcher.forward(request, response);
+		       
 		    }
 		    
 		    private void showDeleteForm(HttpServletRequest request, HttpServletResponse response)
-				    throws ServletException, IOException {
-				        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/DeletarTarefa.jsp");
-				        dispatcher.forward(request, response);
-				    }
-				    
+		    throws ServletException, IOException {
+    			String userId = request.getParameter("userId");
+    			request.setAttribute("userId", userId);
+		        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/DeletarTarefa.jsp");
+		        dispatcher.forward(request, response);
+		    }
+		    
 		    
 
 		    private void showEditForm(HttpServletRequest request, HttpServletResponse response)
@@ -143,17 +160,29 @@ public class Tarefa extends HttpServlet {
 				tarefa.getId();
 				tarefa.getUser();
 				
+				request.setAttribute("todo", tarefa);
+				String userId = request.getParameter("userId");
+		    	request.setAttribute("userId", userId);
+				
 		        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/NovaTarefa.jsp");
-		        request.setAttribute("todo", tarefa);
+		        
 		        dispatcher.forward(request, response);
 
 		    }
 
-		    private void insertTodo(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+		    private void inserirTarefa(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
 
-		    	DAOTarefas dao =new DAOTarefas();
+		    	DAO dao =new DAO();
 				Tarefas tarefa =new Tarefas();
-				tarefa.setNome(request.getParameter("nome"));
+				
+				
+				tarefa.setNome(request.getParameter("nome"));		
+				tarefa.setUser(Integer.valueOf(request.getParameter("userId")));
+				
+				
+				String userId = request.getParameter("id");
+				request.setAttribute("userId", userId);
+		       
 				String date = request.getParameter("data");
 				Date data = null;
 				try {
@@ -165,41 +194,37 @@ public class Tarefa extends HttpServlet {
 				Calendar dataPostagem = Calendar.getInstance();
 				 dataPostagem.setTime(data);
 				 tarefa.setData(dataPostagem);
-				 
-			//	 Part filePart = null;
-				//try {
-					//filePart = request.getPart("imagem");
-				//} catch (IOException e) {
-					// TODO Auto-generated catch block
-				//	e.printStackTrace();
-			//	} catch (ServletException e) {
-					// TODO Auto-generated catch block
-				//	e.printStackTrace();
-				//}
-				 //InputStream inputStream = filePart.getInputStream();
-				 
-				// tarefa.setImagem(inputStream);
-				
+	
 				 tarefa.setCategoria(request.getParameter("categoria"));
-				Usuarios usuario= new Usuarios();
-				tarefa.setUser(usuario.getId());
+				 dao.adiciona(tarefa);
+				 dao.close();
+				 RequestDispatcher dispatcher = request.getRequestDispatcher("list");
+				 try {
+					dispatcher.forward(request, response);
+				} catch (ServletException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
 				
-				
-				dao.adiciona(tarefa);
-		        response.sendRedirect("list");
+		      
 		    }
 		    
 		    
 		    private void filtra(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
 
-		    	DAOTarefas dao =new DAOTarefas();
+		    	DAO dao =new DAO();
 				Tarefas tarefa =new Tarefas();
 				tarefa.setNome(request.getParameter("nome"));
 				
-				
-				List<br.edu.insper.mvc.model.Tarefas> tarefas = dao.getListaPesquisa(tarefa);
+				Integer userId = Integer.valueOf(request.getParameter("userId"));
+				List<br.edu.insper.mvc.model.Tarefas> tarefas = dao.getListaPesquisa(tarefa, userId);
 				request.setAttribute("listTodo", tarefas);
+				request.setAttribute("userId", userId);
+				dao.close();
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/Tarefas.jsp");
 				try {
 					dispatcher.forward(request, response);
@@ -210,18 +235,19 @@ public class Tarefa extends HttpServlet {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				dao.close();
+				
 		    }
 				
 
-		    private void updateTodo(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-		        DAOTarefas dao = new DAOTarefas();
+		    private void atualizaTarefa(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+		        DAO dao = new DAO();
 				Tarefas tarefa = new Tarefas();
 				tarefa.setId(Integer.valueOf(request.getParameter("id")));
 				tarefa.setNome(request.getParameter("nome"));
-				Usuarios usuario= new Usuarios();
-				tarefa.setUser(usuario.getId());
 				
+				String userId = request.getParameter("userId");
+				request.setAttribute("userId", userId);
+		       
 				
 				
 				String date = request.getParameter("data");
@@ -237,13 +263,30 @@ public class Tarefa extends HttpServlet {
 				tarefa.setData(dataPostagem);
 				tarefa.setCategoria(request.getParameter("categoria"));
 				dao.altera(tarefa);
-		        response.sendRedirect("list");
+				dao.close();
+				 RequestDispatcher dispatcher = request.getRequestDispatcher("list");
+				 try {
+					dispatcher.forward(request, response);
+				} catch (ServletException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		    }
 
-		    private void deleteTodo(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-		    	DAOTarefas dao = new DAOTarefas();
+		    private void deletaTarefa(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+		    	DAO dao = new DAO();
+				
+				String userId = request.getParameter("userId");
+				request.setAttribute("userId", userId);
 				dao.remove(Integer.valueOf(request.getParameter("id")));
-		        response.sendRedirect("list");
-		    }
+				dao.close();
+				RequestDispatcher dispatcher = request.getRequestDispatcher("list");
+				try {
+					dispatcher.forward(request, response);
+				} catch (ServletException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}		    
 
 }
+		    }

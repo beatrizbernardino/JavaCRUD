@@ -9,9 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import br.edu.insper.mvc.model.DAOLogin;
-import br.edu.insper.mvc.model.DAOTarefas;
-import br.edu.insper.mvc.model.Login;
+import br.edu.insper.mvc.model.DAO;
+import br.edu.insper.mvc.model.Usuarios;
 
 /**
  * Servlet implementation class Login
@@ -43,26 +42,27 @@ public class Entra extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		DAOLogin dao = new DAOLogin();
+		DAO dao = new DAO();
 		 String username = request.getParameter("username");
 	        String password = request.getParameter("password");
-	        Login login = new Login();
-	        login.setUsername(username);
-	        login.setPassword(password);
+	        Usuarios usuario = new Usuarios();
+	        usuario.setUsername(username);
+	        usuario.setPassword(password);
 	        
 	        try {
-	            if (dao.validate(login)) {
-	            	DAOTarefas daotarefas =new DAOTarefas();
-	          		List<br.edu.insper.mvc.model.Tarefas> tarefas = daotarefas.getLista();
+	            if (dao.validate(usuario)) {
+	            	
+	            	Integer id = dao.id(usuario);
+	          		List<br.edu.insper.mvc.model.Tarefas> tarefas = dao.getLista(id);
 	          		request.setAttribute("listTodo", tarefas);
-	          		daotarefas.close();
-	          		
+	          		request.setAttribute("userId", id);
+	          		dao.close();          		
 	                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/Tarefas.jsp");
 	                dispatcher.forward(request, response);
 	            } else {
 	            	 RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/Erro.jsp");
 		             dispatcher.forward(request, response);
-	             
+		             dao.close();   
 					
 	           
 	            }

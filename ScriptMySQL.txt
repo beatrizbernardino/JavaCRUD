@@ -1,0 +1,14 @@
+
+------------------------------------------------------------------------------------------
+CRIANDO DATABASE PROJETO1 E TABELAS USERS E TAREFAS
+------------------------------------------------------------------------------------------
+
+CREATE DATABASE projeto1;
+USE projeto1;
+
+CREATE TABLE users (id INT NOT NULL AUTO_INCREMENT, nome VARCHAR(32) NOT NULL, username VARCHAR(32) UNIQUE NOT NULL , password VARCHAR(32) NOT NULL, PRIMARY KEY (ID));
+
+
+CREATE TABLE tarefas (id INT NOT NULL AUTO_INCREMENT, nome VARCHAR(32) NOT NULL, data DATE NOT NULL, categoria  VARCHAR(32) NOT NULL, user_id INT NOT NULL REFERENCES  user(id),  PRIMARY KEY (ID));
+
+

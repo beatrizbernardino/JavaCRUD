@@ -25,8 +25,12 @@
                     <label for="uname">Password:</label> <input type="password" class="form-control" id="password" placeholder="Password" name="password" required>
                 </div>
 
-
-                <button type="submit" class="btn btn-success">Submit</button>
+				 <a href="<%=request.getContextPath()%>/Cadastro"
+				     class="btn btn-success">Cadastro</a>
+				     
+                <button type="submit" class="btn btn-success">Entrar</button>
+                
+                
             </form>
         </div>
  

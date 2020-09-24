@@ -47,17 +47,19 @@ margin-top: 30px;
    <div class= "btn-group-lg col-md-10">
    <div class="btn">
 
-    <a href="<%=request.getContextPath()%>/new"
-     class="btn btn-success">Adicionar Tarefa</a>
+   <a href="<%=request.getContextPath()%>/new?userId=${userId}"
+     class="btn btn-success">Adicionar Tarefa
+    </a>
+     
    </div>
    <div class="btn">
 
-    <a href="<%=request.getContextPath()%>/edit"
+    <a href="<%=request.getContextPath()%>/edit?userId=${userId}"
      class="btn btn-success">Editar Tarefa</a>
    </div>
    <div class="btn ">
 
-    <a href="<%=request.getContextPath()%>/del"
+    <a href="<%=request.getContextPath()%>/del?userId=${userId}"
      class="btn btn-success">Deletar Tarefa</a>
    </div>
    
@@ -65,16 +67,16 @@ margin-top: 30px;
 
    
 
-    <a href="<%=request.getContextPath()%>/list"
+    <a href="<%=request.getContextPath()%>/list?userId=${userId}"
      class="btn btn-success">Ver a lista Completa</a>
    </div>
    
      <div class="btn ">
    
-    <a href="<%=request.getContextPath()%>/filt"
+    <a href="<%=request.getContextPath()%>/filt?userId=${userId}"
      class="btn btn-success">Ordenar pela data de entrega mais próxima</a>
    </div>
- 
+  
    </div>
       <div class="searchBar">
  	 <form action="search" method="post"  >
@@ -84,6 +86,10 @@ margin-top: 30px;
       name="nome" >
     </fieldset>
     
+    <input type="hidden"
+      class="form-control"
+      value='${userId}'
+      name="userId" >
     
     <div class="button">
      <button type="submit" class="btn btn-success">Pesquisar</button>
@@ -95,7 +101,6 @@ margin-top: 30px;
    
    
   
-
    <hr>
 	<div class="container"> 
     <h4 class="text-left">Tarefas Pessoais</h4>
@@ -108,7 +113,7 @@ margin-top: 30px;
       <th>Tarefa</th>
       <th>Data de Entrega</th>
       <th>Categoria</th>
-      <th>user</th>
+    
    
      </tr>
     </thead>
@@ -121,9 +126,9 @@ margin-top: 30px;
       <tr>
       <td><c:out value="${todo.id}" /></td>
        <td><c:out value="${todo.nome}" /></td>
-       <td><c:out value="${todo.data.getTime()}" /></td>
+       <td><c:out value="${todo.data.time}" /></td>
        <td><c:out value="${todo.categoria}" /></td>
-        <td></td>
+      
        
 
 
@@ -132,7 +137,7 @@ margin-top: 30px;
       </c:if>
      
      </c:forEach>
-     <!-- } -->
+   
     </tbody>
 
    </table>
@@ -148,7 +153,7 @@ margin-top: 30px;
       <th>Tarefa</th>
       <th>Data de Entrega</th>
       <th>Categoria</th>
-      <th>user</th>
+     
    
      </tr>
     </thead>
@@ -161,9 +166,9 @@ margin-top: 30px;
       <tr>
       <td><c:out value="${todo.id}" /></td>
        <td><c:out value="${todo.nome}" /></td>
-       <td><c:out value="${todo.data.getTime()}" /></td>
+       <td><c:out value="${todo.data.time}" /></td>
        <td><c:out value="${todo.categoria}" /></td>
-        <td></td>
+       
      
 
        
@@ -171,12 +176,13 @@ margin-top: 30px;
       </c:if>
      
      </c:forEach>
-     <!-- } -->
+    
     </tbody>
 
    </table>
    
-
+   
+  
   </div>
 </div>
 

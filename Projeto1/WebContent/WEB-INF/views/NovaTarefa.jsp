@@ -18,10 +18,10 @@
   <div class="card">
    <div class="card-body">
     <c:if test="${todo != null}">
-     <form action="update" method="post"  > 
+     <form action="update" method="post"> 
     </c:if>
     <c:if test="${todo == null}">
-     <form action="insert" method="post"   > 
+     <form action="insert" method="post"> 
     </c:if>
 
 
@@ -35,7 +35,7 @@
      </h2>
      
   
-
+	
     <c:if test="${todo != null}">
      <fieldset class="form-group">
      <label>ID:</label> <input type="number"
@@ -62,13 +62,20 @@
     </fieldset>
     
 
+    
+    
     <fieldset class="form-group">
      <label>Data de entrega</label> <input type="date"
       value="<c:out value='${todo.data}' />" class="form-control"
       name="data" >
     </fieldset>
+    
+    
+    <input type="hidden"
+      value="<c:out value='${userId}' />" name="userId" >
 
-    <button type="submit" class="btn btn-success">Save</button>
+
+    <button type="submit" class="btn btn-success">Salvar</button>
     </form>
    </div>
   </div>

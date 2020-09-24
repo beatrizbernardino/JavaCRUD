@@ -17,8 +17,7 @@
             <h2>Cadastro</h2>
             <div class="col-md-6 col-md-offset-3">
                
-
-                <form  action="<%=request.getContextPath()%>/Cadastro" method="post">
+ <form  action="<%=request.getContextPath()%>/Cadastro" method="post">
 
                     <div class="form-group">
                         <label for="uname">Nome:</label> <input type="text" class="form-control" id="nome" placeholder="Nome" name="nome" required>
@@ -26,14 +25,14 @@
 
 
                     <div class="form-group">
-                        <label for="uname">UserName:</label> <input type="text" class="form-control" id="username" placeholder="UserName" name="username" required>
+                        <label for="uname">Usuário:</label> <input type="text" class="form-control" id="username" placeholder="UserName" name="username" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="uname">Password:</label> <input type="password" class="form-control" id="password" placeholder="Password" name="password" required>
+                        <label for="uname">Senha:</label> <input type="password" class="form-control" id="password" placeholder="Password" name="password" required>
                     </div>
 
-                    <button type="submit" class="btn btn-success">Submit</button>
+                    <button type="submit" class="btn btn-success">Cadastrar</button>
                     
                     <div class="btn">
 
@@ -41,7 +40,7 @@
 				     class="btn btn-success">Login</a>
 				   </div>
 
-                </form>
+                </form> 
             </div>
         </div>
        

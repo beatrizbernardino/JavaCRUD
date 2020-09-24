@@ -10,9 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.edu.insper.mvc.model.DAOTarefas;
-import br.edu.insper.mvc.model.DAOUsuarios;
-import br.edu.insper.mvc.model.Tarefas;
+import br.edu.insper.mvc.model.DAO;
 import br.edu.insper.mvc.model.Usuarios;
 
 /**
@@ -44,31 +42,42 @@ public class Registra extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		DAOUsuarios dao =new DAOUsuarios();
-		DAOTarefas daotarefas= new DAOTarefas();
+		DAO dao =new DAO();
+		
 		String nome = request.getParameter("nome");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-
+        
+        
         Usuarios usuario = new Usuarios();
      
         usuario.setNome(nome);
         usuario.setUsername(username);
         usuario.setPassword(password);
-        dao.adiciona(usuario);
-        
+        dao.adicionaUsuario(usuario);
+       
 
-
-  
+   
+		Integer id;
+		try {
+		id = dao.id(usuario);
+		
       
-		List<br.edu.insper.mvc.model.Tarefas> tarefas = daotarefas.getLista();
+		List<br.edu.insper.mvc.model.Tarefas> tarefas = dao.getLista(id);
 		request.setAttribute("listTodo", tarefas);
 		
+		request.setAttribute("userId", id);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/Tarefas.jsp");
         dispatcher.forward(request, response);
-        daotarefas.close();
+
         dao.close();
+        
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
     }
 
 }
